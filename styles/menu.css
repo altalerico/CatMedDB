@@ -1,0 +1,247 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.menu_container {
+	height: 400px;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-image:url('/img/menu_bg.png');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.menu_bar {
+	height:80px;
+	width:100%;
+	position: absolute;
+	top: 300px;
+	z-index:3;
+	background: #7abcff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7abcff), color-stop(44%,#60abf8), color-stop(100%,#4096ee)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #7abcff 0%,#60abf8 44%,#4096ee 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+}
+
+#menu_paw {
+	position: relative;
+	width:50px;
+	height:50px;
+	left:20px;
+	top:14px;
+	margin-right: 30px;
+}
+
+nav a {
+	font-family: 'Raleway', sans-serif;
+	position:relative;
+	font-size:26px;
+	left:115px;
+	bottom:8px;
+	margin-right:20px;
+	height:80px;
+	padding:18px;
+	display:inline-block;
+	text-decoration:none;
+	color:white;
+	text-align: center;
+	z-index: 1;
+	transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+} nav a:hover {
+	background: #416c97;
+}
+
+.nav_line {
+	height:4px;
+	background:white;
+	position:absolute;
+	top:76px;
+	z-index:6;
+	left: 200px;
+	width:167px;
+}
+
+.dp_dp {
+	left:200px;
+	width:167px;
+}
+.cp_cp {
+	left:392px;
+	width:89px;
+}
+.fp_fp {
+	left:506px;
+	width:124px;
+}
+.tp_tp {
+	left:655px;
+	width:173px;
+}
+
+.dp_cp {
+	animation:dcSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:dcSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes dcSlide {
+	0% {left:200px; width:167px;}
+	100% {left:392px; width:89px;}
+} @-webkit-keyframes dcSlide /* Safari and Chrome */ {
+	0% {left:200px; width:167px;}
+	100% {left:392px; width:89px;}
+}
+
+.dp_fp {
+	animation:dfSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:dfSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes dfSlide {
+	0% {left:200px; width:167px;}
+	100% {left:506px; width:124px;}
+} @-webkit-keyframes dfSlide /* Safari and Chrome */ {
+	0% {left:200px; width:167px;}
+	100% {left:506px; width:124px;}
+}
+
+.dp_tp {
+	animation:dtSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:dtSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes dtSlide {
+	0% {left:200px; width:167px;}
+	100% {left:655px; width:173px;}
+} @-webkit-keyframes dtSlide /* Safari and Chrome */ {
+	0% {left:200px; width:167px;}
+	100% {left:655px; width:173px;}
+}
+
+.cp_dp {
+	animation:cdSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:cdSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes cdSlide {
+	0% {left:392px; width:89px;}
+	100% {left:200px; width:167px;}
+} @-webkit-keyframes cdSlide /* Safari and Chrome */ {
+	0% {left:392px; width:89px;}
+	100% {left:200px; width:167px;}
+	
+}
+
+.cp_fp {
+	animation:cfSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:cfSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes cfSlide {
+	0% {left:392px; width:89px;}
+	100% {left:506px; width:124px;}
+} @-webkit-keyframes cfSlide /* Safari and Chrome */ {
+	0% {left:392px; width:89px;}
+	100% {left:506px; width:124px;}
+}
+
+.cp_tp {
+	animation:ctSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:ctSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes ctSlide {
+	0% {left:392px; width:89px;}
+	100% {left:655px; width:173px;}
+} @-webkit-keyframes ctSlide /* Safari and Chrome */ {
+	0% {left:392px; width:89px;}
+	100% {left:655px; width:173px;}
+}
+
+.fp_dp {
+	animation:fdSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:fdSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes fdSlide {
+	0% {left:506px; width:124px;}
+	100% {left:200px; width:167px;}
+} @-webkit-keyframes fdSlide /* Safari and Chrome */ {
+	0% {left:506px; width:124px;}
+	100% {left:200px; width:167px;}
+}
+
+.fp_cp {
+	animation:fcSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:fcSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes fcSlide {
+	0% {left:506px; width:124px;}
+	100% {left:392px; width:89px;}
+} @-webkit-keyframes fcSlide /* Safari and Chrome */ {
+	0% {left:506px; width:124px;}
+	100% {left:392px; width:89px;}
+}
+
+.fp_tp {
+	animation:ftSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:ftSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes ftSlide {
+	0% {left:506px; width:124px;}
+	100% {left:655px; width:173px;}
+} @-webkit-keyframes ftSlide /* Safari and Chrome */ {
+	0% {left:506px; width:124px;}
+	100% {left:655px; width:173px;}
+}
+
+.tp_dp {
+	animation:tdSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:tdSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes tdSlide {
+	0% {left:655px; width:173px;}
+	100% {left:200px; width:167px;}
+} @-webkit-keyframes tdSlide /* Safari and Chrome */ {
+	0% {left:655px; width:173px;}
+	100% {left:200px; width:167px;}
+}
+
+.tp_cp {
+	animation:tcSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:tcSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes tcSlide {
+	0% {left:655px; width:173px;}
+	100% {left:392px; width:89px;}
+} @-webkit-keyframes tcSlide /* Safari and Chrome */ {
+	0% {left:655px; width:173px;}
+	100% {left:392px; width:89px;}
+}
+
+.tp_fp {
+	animation:tfSlide 1s;
+	animation-fill-mode:forwards;
+	-webkit-animation:tfSlide 1s; /* Safari and Chrome */
+	-webkit-animation-fill-mode:forwards;
+} @keyframes tfSlide {
+	0% {left:655px; width:173px;}
+	100% {left:506px; width:124px;}
+} @-webkit-keyframes tfSlide /* Safari and Chrome */ {
+	0% {left:655px; width:173px;}
+	100% {left:506px; width:124px;}
+}
