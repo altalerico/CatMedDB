@@ -33,7 +33,7 @@ input  {
 }
 
 input[type="submit"] {
-	width: 160px;
+	width: 140px;
 	height: 40px;
 	text-align: center;
 	color: white;
@@ -86,7 +86,7 @@ td {
 }
 
 .button {
-	width: 160px;
+	width: 140px;
 	height: 40px;
 	text-align: center;
 	color: white;
@@ -216,19 +216,28 @@ ul{
 	display: block;
 }
 
+#profile_wrapper {
+	position: relative;
+	top: 300px;
+	left: 0;
+	max-width: 1100px;
+	margin: 0 auto;
+	display: block;
+}
+
 #container_left {
 	position: absolute;
 	top: 100px;
 	left: 0px;
-	width: 610px;
+	width: 550px;
 	display: inline-block;
 }
 
 #container_right {
 	position: absolute;
 	top: 100px;
-	left: 610px;
-	width: 610px;
+	left: 550px;
+	width: 550px;
 	display: inline-block;
 }
 
@@ -247,13 +256,13 @@ ul{
 }
 
 .profile_div {
-	width: 550px;
+	width: 510px;
 	border: 1px solid #C0C0C0;
 	display: block;
 	position: relative;
-	margin: 0 30px;
-	margin-bottom: 50px;
-	box-shadow: rgba(0,0,0,.2) 0 2px 16px;
+	margin: 0 20px;
+	margin-bottom: 40px;
+	box-shadow: rgba(0,0,0,.3) 0 2px 16px;
 	background-color: white;
 }
 
@@ -333,15 +342,15 @@ ul{
 	z-index: 2;
 	position: absolute;
 	right: 20px;
-	height: 40px;
-	width: 180px;
-	font-size: 12px;
+	height: 30px;
+	width: 140px;
+	font-size: 9px;
 }
 
 #profile_photo_div {
 	padding: 0px;
 	margin-top: 0px;
-	height: 421px;
+	height: 415px;
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -375,7 +384,7 @@ ul{
 .profile_label {
 	position: relative;
 	display: inline-block;
-	width: 120px;
+	width: 100px;
 	height: 30px;
 	margin-bottom: 20px;
 	margin-left: 20px;
@@ -421,7 +430,7 @@ ul{
 .profile_submit,
 #foster_toggle,
 #dob {
-	width: 160px;
+	width: 140px;
 	position: relative;
 	float: right;
 }
@@ -431,7 +440,9 @@ ul{
 }
 
 #notes {
-	width: 364px;
+	width: 343px;
+	margin: -1px;
+	left: 1px;
 }
 
 #datepicker {
@@ -664,13 +675,15 @@ ul{
 }
 
 .treatment_row {
-	height: 30px;
+	height: 24px;
 	margin-left: 20px;
+	margin-bottom: 6px;
 }
 
 .profile_treatment_text {
 	display: inline-block;
-	width: 410px;
+	overflow: hidden;
+	width: 360px;
 	height: 24px;
 }
 
@@ -702,7 +715,9 @@ ul{
 }
 
 .db_treatment {
-	width: 160px;
+	width: 150px;
+	overflow: hidden;
+	top: 2px;
 }
 
 .db_foster_name {
@@ -744,7 +759,7 @@ span.status {
 	height: 24px;
 	display: inline-block;
 	margin-right: 10px;
-	margin-top: 6px;
+	margin-bottom: 3px;
 	transition: all .1s ease-in-out;
 	-moz-transition: all .1s ease-in-out;
 	-webkit-transition: all .1s ease-in-out;

@@ -1,20 +1,43 @@
 <?php
-include_once 'D:/Users/Anthony/Documents/Website/includes/db_connect.php';
+include_once 'includes/db_connect.php';
 
 parse_str($_SERVER['QUERY_STRING']);
 
+$delete = false;
+$prepared = false;
+
 switch ($action) {
 	case 'received':
-		$update_result = mysqli_query($con, "UPDATE intersect_cat_treatment SET received=1 WHERE idintersect=$id");
+		$set = 1;
 		break;
 	case 'restore':
-		$update_result = mysqli_query($con, "UPDATE intersect_cat_treatment SET received=0 WHERE idintersect=$id");
+		$set = 0;
 		break;
 	case 'delete':
-		$delete_result = mysqli_query($con, "DELETE FROM intersect_cat_treatment WHERE idintersect=$id");
+		$set = 1;
+		$delete = true;
 		break;
 	default:
 		break;
 }
-mysqli_close($con);
+
+$stmt =  $mysqli->stmt_init();
+
+if ($delete) {
+	if ($stmt = $mysqli->prepare("UPDATE intersect_cat_treatment SET deleted=? WHERE idintersect=?")) {
+		$prepared = true;
+	}
+} else {
+	if ($stmt = $mysqli->prepare("UPDATE intersect_cat_treatment SET received=? WHERE idintersect=?")) {
+		$prepared = true;
+	}
+}
+
+if ($prepared) {
+	$stmt->bind_param("ii", $set, $id);
+	$stmt->execute();
+	$stmt->close();
+}
+
+$mysqli->close();
 ?>

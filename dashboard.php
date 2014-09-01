@@ -1,18 +1,19 @@
 <?php
-include_once 'D:/Users/Anthony/Documents/Website/includes/db_connect.php';
+include_once 'includes/db_connect.php';
+include_once 'includes/functions.php';
 
-session_start();
+sec_session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<title>Dashboard</title>
-	<?php include_once 'header.inc'; ?>
+	<?php include_once 'includes/header.inc'; ?>
 </head>
 
 <body class="_dp">
 <?php 
-	include 'menu.inc';
+	include 'includes/menu.inc';
 
 
 	if($_SESSION['page'] == NULL) {
@@ -23,7 +24,7 @@ session_start();
 	$_SESSION['page'] = "dp";
 
 	if(isset($_POST['check'])) {
-		$received_update = mysqli_query($con, sprintf("
+		$received_update = mysqli_query($mysqli, sprintf("
 			UPDATE `intersect_cat_treatment` 
 			SET `received`=1 
 			WHERE `idintersect`=%u;", $_POST['check'])
@@ -44,17 +45,17 @@ session_start();
 		$first_today = true;
 		$first_week = true;
 
-		$join_result = mysqli_query($con, "
+		$join_result = mysqli_query($mysqli, "
 			SELECT * FROM intersect_cat_treatment 
 			INNER JOIN cats
 			ON cats_idcat = idcat 
-			WHERE received = 0 AND location = 'PetSmart' AND date < '$week'
+			WHERE received=0 AND deleted=0 AND location='PetSmart' AND date<'$week'
 			ORDER BY date ASC;"
 		);
 		while($join_row = mysqli_fetch_array($join_result)) {
 			$intersect_id = $join_row['idintersect'];
 			$treatment_id = $join_row['treatments_idtreatment'];
-			$treatment_result = mysqli_query($con, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
+			$treatment_result = mysqli_query($mysqli, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
 			$treatment_row = mysqli_fetch_array($treatment_result);
 			$cat_name = $join_row['name'];
 			$cat_id = $join_row['idcat'];
@@ -98,24 +99,24 @@ session_start();
 		$first_today = true;
 		$first_week = true;
 
-		$foster_join_result = mysqli_query($con, "
+		$foster_join_result = mysqli_query($mysqli, "
 			SELECT * FROM intersect_cat_treatment 
 			INNER JOIN cats
 			ON cats_idcat = idcat 
-			WHERE received = 0 AND location = 'Foster' AND date < '$week'
+			WHERE received=0 AND deleted=0 AND location='Foster' AND date<'$week'
 			ORDER BY date ASC;"
 		);
 		while($foster_join_row = mysqli_fetch_array($foster_join_result)) {
 			$intersect_id = $foster_join_row['idintersect'];
 			$treatment_id = $foster_join_row['treatments_idtreatment'];
-			$treatment_result = mysqli_query($con, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
+			$treatment_result = mysqli_query($mysqli, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
 			$treatment_row = mysqli_fetch_array($treatment_result);
 
 			$cat_name = $foster_join_row['name'];
 			$cat_id = $foster_join_row['idcat'];
 			$foster_id = $foster_join_row['fosters_idfoster'];
 
-			$foster_result = mysqli_query($con, "SELECT * FROM fosters WHERE idfoster = $foster_id");				
+			$foster_result = mysqli_query($mysqli, "SELECT * FROM fosters WHERE idfoster = $foster_id");				
 			$foster_row = mysqli_fetch_array($foster_result);
 			$foster_name = $foster_row['name'];
 
@@ -151,7 +152,7 @@ session_start();
 			echo "</div>";
 		}
 		echo "</div>";
-		mysqli_close($con);
+		mysqli_close($mysqli);
 		?>
 		</div>
 	</div>

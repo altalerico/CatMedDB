@@ -1,17 +1,19 @@
+<?php
+include 'includes/db_connect.php';
+
+sec_session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Foster List</title>
-	<?php include 'header.inc'; ?>
+	<?php include 'includes/header.inc'; ?>
 </head>
 
 <body class="_fp">
 
 <?php 
-include 'menu.inc';
-include 'D:/Users/Anthony/Documents/mysqlconnect.php';
-
-session_start();
+include 'includes/menu.inc';
 
 if($_SESSION['page'] == NULL) {
 	echo "<input type='hidden' class='pass' value='NULL'>";

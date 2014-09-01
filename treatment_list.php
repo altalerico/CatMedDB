@@ -1,18 +1,22 @@
+<?php
+include_once 'includes/db_connect.php';
+include_once 'includes/functions.php';
+include_once 'includes/classes.php';
+
+sec_session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Treatment List</title>
-	<?php include 'header.inc'; ?>
+	<?php include 'includes/header.inc'; ?>
 </head>
 
 <body class="_tp">
 
 <?php 
-include 'menu.inc';
-include 'functions.php';
-include 'D:/Users/Anthony/Documents/mysqlconnect.php';
+include 'includes/menu.inc';
 
-session_start();
 if($_SESSION['page'] == NULL) {
 	echo "<input type='hidden' class='pass' value='NULL'>";
 } else {
@@ -25,13 +29,13 @@ $_SESSION['page'] = "tp";
 </div>
 <div id="container_left">
 	<?php
-		$treatments = mysqli_query($con, sprintf("SELECT * FROM treatments"));
+		$treatments = mysqli_query($mysqli, sprintf("SELECT * FROM treatments"));
 	?>
 	<form method="post">
 	<?php
 		while($treatment = mysqli_fetch_array($treatments)) {
 			// echo $treatment['name'];
-			$intervals = mysqli_query($con, sprintf("
+			$intervals = mysqli_query($mysqli, sprintf("
 				SELECT * FROM treatment_interval
 				WHERE treatments_idtreatment=%u ORDER BY priority",
 				$treatment['idtreatment'])
@@ -57,7 +61,7 @@ $_SESSION['page'] = "tp";
 			echo "<br>";
 		}
 
-		mysqli_close($con); 
+		mysqli_close($mysqli); 
 	?>
 	</form>
 </div>

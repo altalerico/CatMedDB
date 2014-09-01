@@ -1,19 +1,22 @@
+<?php
+include_once 'includes/db_connect.php';
+include_once 'includes/functions.php';
+include_once 'includes/classes.php';
+
+sec_session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Course of Treatment</title>
-	<?php include 'header.inc'; ?>
+	<?php include 'includes/header.inc'; ?>
 </head>
 
 <body class="_tp">
 
 <?php 
-include 'menu.inc';
-include 'functions.php';
-include 'classes.php';
-include 'D:/Users/Anthony/Documents/mysqlconnect.php';
+include 'includes/menu.inc';
 
-session_start();
 if($_SESSION['page'] == NULL) {
 	echo "<input type='hidden' class='pass' value='NULL'>";
 } else {

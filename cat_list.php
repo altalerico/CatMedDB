@@ -1,18 +1,19 @@
 <?php
-include_once 'D:/Users/Anthony/Documents/Website/includes/db_connect.php';
+include_once 'includes/db_connect.php';
+include_once 'includes/functions.php';
 
-session_start();
+sec_session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<title>Cat_List</title>
-	<?php include_once 'header.inc'; ?>
+	<?php include_once 'includes/header.inc'; ?>
 </head>
 
 <body class="_cp">
 <?php 
-include_once 'menu.inc';
+include_once 'includes/menu.inc';
 
 // Session variables
 if($_SESSION['page'] == NULL) {
@@ -45,28 +46,28 @@ $_SESSION['page']="cp";
 	</div>
 	<div id="container">
 	<?php
-		$cats_result = mysqli_query($con, "SELECT * FROM cats ORDER BY name;");
+		$cats_result = mysqli_query($mysqli, "SELECT * FROM cats ORDER BY name;");
 		while($cat_row = mysqli_fetch_array($cats_result)) {
 			$cat_name = $cat_row['name'];
 			$cat_id = $cat_row['idcat'];
 			$cat_location = $cat_row['location'];
 
 			$foster_name = "";
-			$fosters_result = mysqli_query($con,"SELECT * FROM fosters");
+			$fosters_result = mysqli_query($mysqli,"SELECT * FROM fosters");
 			while($foster_row = mysqli_fetch_array($fosters_result)) {
 				if($cat_row['fosters_idfoster'] == $foster_row['idfoster']) {
 					$foster_name = $foster_row['name'];
 				}
 			}
 
-			$photo_result = mysqli_query($con, "SELECT * FROM photos WHERE cats_idcat = $cat_id AND selected = 1;");
+			$photo_result = mysqli_query($mysqli, "SELECT * FROM photos WHERE cats_idcat = $cat_id AND selected = 1;");
 			$photo_row = mysqli_fetch_array($photo_result);
 			$photo_file = str_replace(" ", "%20", $photo_row['file']);
 
 			$bg_img = ($photo_file == "" ? "background-image:url(./img/default_small.png);" : "background-image:url(./upload/$photo_file);");
 			echo "<div class = 'cat_box $cat_location'>";
 
-			$intersect_result = mysqli_query($con, "
+			$intersect_result = mysqli_query($mysqli, "
 				SELECT * FROM intersect_cat_treatment 
 				WHERE received = 0 AND cats_idcat = $cat_id
 				ORDER BY date ASC"
@@ -92,7 +93,7 @@ $_SESSION['page']="cp";
 
 			echo "</div>";
 		}
-		mysqli_close($con);
+		mysqli_close($mysqli);
 	?>
 	</div>
 </div>
