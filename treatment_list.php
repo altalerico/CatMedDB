@@ -24,46 +24,30 @@ if($_SESSION['page'] == NULL) {
 }
 $_SESSION['page'] = "tp";
 ?>
-<div id="title_left">
-	<h1>Course of Treatment List</h1>
-</div>
-<div id="container_left">
+<h1 id="page_title">Treatments</h1>
+<div id="container">
 	<?php
-		$treatments = mysqli_query($mysqli, sprintf("SELECT * FROM treatments"));
-	?>
-	<form method="post">
-	<?php
-		while($treatment = mysqli_fetch_array($treatments)) {
-			// echo $treatment['name'];
-			$intervals = mysqli_query($mysqli, sprintf("
-				SELECT * FROM treatment_interval
-				WHERE treatments_idtreatment=%u ORDER BY priority",
-				$treatment['idtreatment'])
-			);
-
-			$treatment_url = "treatment.php?id=".$treatment['idtreatment'];
-
-			if(mysqli_fetch_array($intervals) != NULL) {
-				?>
-				<span class="course" title="Edit the course of treatment for <?php echo $treatment['name']; ?>."
-					onClick="window.location.href='<?php echo $treatment_url; ?>'">
-					<?php echo $treatment['name']; ?>
-				</span>
-			<?php
-			} else {
-				?>
-				<span class="missing_course" title="Create a course of treatment for <?php echo $treatment['name']; ?>."
-					onClick="window.location.href='<?php echo $treatment_url; ?>'">
-					<?php echo $treatment['name']; ?>
-				</span>
-				<?php
+	$query = "SELECT idtreatment, name FROM treatments";
+	if ($result = $mysqli->query($query)) {
+		while ($row = $result->fetch_assoc()) {
+			echo "<div class='row'>";
+			if ($stmt = $mysqli->prepare("SELECT idinterval 
+				FROM treatment_interval 
+				WHERE treatments_idtreatment=?"))
+			{
+				$stmt->bind_param('i', $row['idtreatment']);
+				$stmt->execute();
+				$stmt->store_result();
+				$add_class = ($stmt->num_rows == 0 ? "missed_text" : ""); 
+				$stmt->close();
 			}
-			echo "<br>";
+			printf("<div class='treatment_name %s'>%s</div>", $add_class, $row['name']);
+			echo "</div>";
 		}
-
-		mysqli_close($mysqli); 
+		$result->close();
+	}
+	$mysqli->close(); 
 	?>
-	</form>
 </div>
 </body>
 </html>

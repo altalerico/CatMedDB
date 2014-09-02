@@ -4,7 +4,6 @@ include_once 'includes/db_connect.php';
 parse_str($_SERVER['QUERY_STRING']);
 
 $delete = false;
-$prepared = false;
 
 switch ($action) {
 	case 'received':
@@ -22,18 +21,10 @@ switch ($action) {
 }
 
 $stmt =  $mysqli->stmt_init();
+$query = ($delete ? "UPDATE intersect_cat_treatment SET deleted=? WHERE idintersect=?" : 
+	"UPDATE intersect_cat_treatment SET received=? WHERE idintersect=?");
 
-if ($delete) {
-	if ($stmt = $mysqli->prepare("UPDATE intersect_cat_treatment SET deleted=? WHERE idintersect=?")) {
-		$prepared = true;
-	}
-} else {
-	if ($stmt = $mysqli->prepare("UPDATE intersect_cat_treatment SET received=? WHERE idintersect=?")) {
-		$prepared = true;
-	}
-}
-
-if ($prepared) {
+if ($stmt = $mysqli->prepare($query)) {
 	$stmt->bind_param("ii", $set, $id);
 	$stmt->execute();
 	$stmt->close();

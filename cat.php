@@ -30,8 +30,9 @@ sec_session_start();
 	$_SESSION['page'] = "cp";
 
 	// SQL queries of the database to get relevant cat info and set respective variables.
-	$cat = new cat($id, $mysqli);
+	$cat = new cat($mysqli, $id);
 
+	// Foster names for select.
 	$query = "SELECT idfoster, name FROM fosters";
 	if ($result = $mysqli->query($query)) {
 		$fosters = $result->fetch_all(MYSQLI_ASSOC);
@@ -59,6 +60,7 @@ sec_session_start();
 		echo $selected_photo_file;
 	}
 
+	// Treatment names for select.
 	$query = "SELECT idtreatment, name FROM treatments";
 	if ($result = $mysqli->query($query)) {
 		$treatments = $result->fetch_all(MYSQLI_ASSOC);
@@ -85,10 +87,10 @@ sec_session_start();
 ?>	
 
 <!-- Cat's profile -->
-<?php echo "<h1 id='profile_name'>$cat->name's Profile</h1>"; ?>
-<div id = "profile_wrapper">
+<?php echo "<h1 id='page_title'>$cat->name's Profile</h1>"; ?>
+<div id="profile_wrapper">
 
-	<div id = "container_left">
+	<div id="container_left">
 
 		<!-- Information box -->
 		<div class="profile_div">
@@ -117,9 +119,9 @@ sec_session_start();
 				<select name="location" id="location" onchange="fosterToggle()">
 				<?php
 					$locations = array ("", "Adopted", "Foster", "PetSmart");
-					foreach ($locations as $l) {
-						$selected = ($l == $cat->location ? "selected='selected'" : "");
-						echo "<option $selected>$l</option>";
+					foreach ($locations as $location) {
+						$selected = ($location == $cat->location ? "selected='selected'" : "");
+						echo "<option $selected>$location</option>";
 					}
 				?>
 				</select>
@@ -128,11 +130,11 @@ sec_session_start();
 				$hidden = ($cat->location == "Foster" ? "" : "hidden");
 				echo "<select name='foster' id='foster_toggle' class='$hidden'>";
 
-				foreach ($fosters as $f) {
-					$f_id = $f['idfoster'];
-					$f_name = $f['name'];
-					$selected = ($f_id == $cat->foster ? "selected='selected'" : "");
-					echo "<option value='$f_id' $selected>$f_name</option>";
+				foreach ($fosters as $foster) {
+					$selected = ($foster['idfoster'] == $cat->foster ? "selected='selected'" : "");
+					echo "<option 
+						value='" . $foster['idfoster'] . "' $selected>" . 
+						$foster['name'] . "</option>";
 				}
 				?>
 				</select>
@@ -141,19 +143,18 @@ sec_session_start();
 				if (isset($cat->dob)) {
 					$birth = date_create($cat->dob);
 					$now = date_create("now");
-					$year = date('Y')-1;
 					$interval = date_diff($birth, $now);
 				
 					if ($interval->format('%y') >= 1) {
 						$age_value = $interval->format('%y');
-						$age_units = "Years";
+						$age_unit = "Years";
 					} elseif ($interval->format('%m') >= 1) {
 						$age_value = $interval->format('%m');
-						$age_units = "Months";
+						$age_unit = "Months";
 					} else {
 						$days = $interval->format('%d');
 						$age_value = (int) ($days / 7);
-						$age_units = "Weeks";
+						$age_unit = "Weeks";
 					}
 				}
 				?>
@@ -161,9 +162,9 @@ sec_session_start();
 				<input type="text" id="age_input" name="age_value" value="<?php echo $age_value; ?>">
 				<select name="age_units" id="age_select">
 				<?php
-					$age_units_array = array ("","Weeks","Months","Years");
-					foreach($age_units_array as $unit) {
-						$selected = ($unit == $age_units ? "selected='selected'" : "");
+					$units = array ("","Weeks","Months","Years");
+					foreach($units as $unit) {
+						$selected = ($unit == $age_unit ? "selected='selected'" : "");
 						echo "<option $selected>$unit</option>";
 					}
 					?>
@@ -189,9 +190,10 @@ sec_session_start();
 				<select name="treatment" id="treatment">
 					<option></option>
 					<?php
-					foreach ($treatments as $t) {
-						$t_id = $t['idtreatment'];
-						echo "<option value='$t_id'>" . $t['name'] . "</option>";
+					foreach ($treatments as $treatment) {
+						echo "<option 
+							value='" . $treatment['idtreatment'] . "'>" . 
+							$treatment['name'] . "</option>";
 					}
 					?>
 				</select><br>
@@ -244,7 +246,7 @@ sec_session_start();
 						if (!$any_today) {
 							$any_today = true;
 							if ($any_missed) {
-								echo "<div class='treatment_row'></div>";
+								echo "<div class='row'></div>";
 							}
 						}
 						$span = "<span class='today_text'>$ui->name</span>";
@@ -253,13 +255,13 @@ sec_session_start();
 						if (!$any_upcoming) {
 							$any_upcoming = true;
 							if ($any_missed or $any_today) {
-								echo "<div class='treatment_row'></div>";
+								echo "<div class='row'></div>";
 							}
 						}
 						$treatment_text = "$ui->name scheduled for $print_date.";
 					}
-					echo "<div class='treatment_row'>";
-						echo "<div class='profile_treatment_text row'>";
+					echo "<div class='row'>";
+						echo "<div class='profile_treatment_text row_element'>";
 							echo $treatment_text;
 						echo "</div>";
 						echo "<div 	class='box_submit uncheck' 
@@ -271,14 +273,14 @@ sec_session_start();
 					echo "</div>";
 				}
 
-				echo "<div class='treatment_row'></div>";
-				echo "<div class='treatment_row'></div>";
+				echo "<div class='row'></div>";
+				echo "<div class='row'></div>";
 
 				foreach ($received->intersects as $ri) {
 					$print_date = date("M j, Y", strtotime($ri->date));
 
-					echo "<div class='treatment_row received_text'>";
-						echo "<div class='profile_treatment_text row'>";
+					echo "<div class='row received_text'>";
+						echo "<div class='profile_treatment_text row_element'>";
 							echo "$ri->name on $print_date.";
 						echo "</div>";
 						echo "<div 	class='box_submit check_received' 
@@ -325,6 +327,7 @@ sec_session_start();
 					}
 				?>
 				</div>
+				<input type="hidden" name="name" id="hiddenField" value="<?php echo $cat->name ?>">
 				<input type="file" name="file" id="file" class="profile_scan_explorer">
 			</div>	
 			</form>

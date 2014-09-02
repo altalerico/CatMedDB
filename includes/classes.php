@@ -58,14 +58,13 @@ class cat {
 	public $foster;
 	public $notes;
 
-	public function __construct($id, $mysqli) {
-		$this->id = $idcat;
+	public function __construct($mysqli, $id) {
+		$this->id = $id;
 
 		$stmt =  $mysqli->stmt_init();
 		if ($stmt = $mysqli->prepare("SELECT name, dob, sex, location, fosters_idfoster, notes FROM cats WHERE idcat=?")) {
 			$stmt->bind_param("i", $id);
 			$stmt->execute();
-			$stmt->store_result();
 			$stmt->bind_result($this->name, $this->dob, $this->sex, $this->location, $this->foster, $this->notes);
 			$stmt->fetch();
 			$stmt->close();
@@ -96,7 +95,7 @@ class cat_treatments {
 		$stmt =  $mysqli->stmt_init();
 		$query = "	SELECT idintersect, name, date
 					FROM intersect_cat_treatment 
-					JOIN treatments
+					INNER JOIN treatments
 					ON treatments_idtreatment=idtreatment
 					WHERE deleted=0 AND cats_idcat=? AND received=?
 					ORDER BY " . $order;
@@ -104,11 +103,43 @@ class cat_treatments {
 		if ($stmt = $mysqli->prepare($query)) {
 			$stmt->bind_param("ii", $cat, $received);
 			$stmt->execute();
-			$stmt->store_result();
 			$stmt->bind_result($idintersect, $name, $date);
 			while ($stmt->fetch()) {
 				$intersect = new intersect($idintersect, $name, $date);
 				array_push($this->intersects, $intersect);
+			}
+			$stmt->close();
+		}
+	}
+}
+
+class location_treatments {
+
+	public $rows;
+
+	public function __construct($mysqli, $location) {
+		$this->rows = array ();
+
+		$week = date("Y-m-d", strtotime('next week'));
+
+		$stmt =  $mysqli->stmt_init();
+
+		if ($stmt = $mysqli->prepare("SELECT idintersect, t.`name` AS t_name, idcat, 
+				cats.`name` AS c_name, `date`, fosters_idfoster AS f_id
+			FROM intersect_cat_treatment AS ict
+			INNER JOIN treatments AS t
+			ON treatments_idtreatment=idtreatment
+			INNER JOIN cats
+			ON cats_idcat=idcat
+			WHERE location=? AND `date`<? AND deleted=0 AND received=0
+			ORDER BY `date` ASC"))
+		{
+			$stmt->bind_param("ss", $location, $week);
+			$stmt->execute();
+			$stmt->bind_result($idintersect, $t_name, $idcat, $c_name, $date, $f_id);
+			while ($stmt->fetch()) {
+				$temp = array ($idintersect, $t_name, $idcat, $c_name, $date, $f_id);
+				array_push($this->rows, $temp);
 			}
 			$stmt->close();
 		}

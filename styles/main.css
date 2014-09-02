@@ -199,7 +199,7 @@ ul{
 	width: 660px;
 }
 
-#profile_name {
+#page_title {
 	position: relative;
 	width: 100%;
 	top: 420px;
@@ -246,6 +246,7 @@ ul{
 	top: 100px;
 	left: 0px;
 	width: 600px;
+	display: inline-block;
 }
 
 #db_container_right {
@@ -253,6 +254,17 @@ ul{
 	top: 100px;
 	left: 600px;
 	width: 620px;
+	display: inline-block;
+}
+
+#container {
+	position: relative;
+	top: 400px;
+	left: 0px;
+	width: 830px;
+	display: block;
+	margin: 0 auto;
+	padding-bottom: 100px;
 }
 
 .profile_div {
@@ -363,7 +375,7 @@ ul{
 	position: absolute;
 	width: 75px;
 	height: 75px;
-	left: 248px;
+	left: 217px;
 	bottom: 30px;
 	background-image: url('/img/camera.png');
 	margin: 0 auto;
@@ -502,7 +514,7 @@ ul{
 
 /* Cat List */
 
-#container {
+#cat_container {
 	position: absolute;
 	top: 140px;
 	left: 180px;
@@ -674,7 +686,11 @@ ul{
 	width: 600px;
 }
 
-.treatment_row {
+div.db_row {
+	height: 24px;
+}
+
+div.row {
 	height: 24px;
 	margin-left: 20px;
 	margin-bottom: 6px;
@@ -691,7 +707,7 @@ ul{
 	color: #76b7f9;
 	width: 140px;
 	display: inline-block;
-	margin: 0 10px;
+	text-align: center;
 	transition: all .1s ease-in-out;
 	-moz-transition: all .1s ease-in-out;
 	-webkit-transition: all .1s ease-in-out;
@@ -704,23 +720,21 @@ ul{
 	-webkit-transform: scale(1.05,1.05);
 }
 
-.row {
+.row_element {
 	display: inline-block;
 	position: relative;
-	bottom: 4px;
+	overflow: hidden;
 }
 
 .db_date {
 	width: 80px;
 }
 
-.db_treatment {
+.treatment_name {
 	width: 150px;
-	overflow: hidden;
-	top: 2px;
 }
 
-.db_foster_name {
+.foster_name {
 	width: 110px;
 }
 
@@ -759,7 +773,6 @@ span.status {
 	height: 24px;
 	display: inline-block;
 	margin-right: 10px;
-	margin-bottom: 3px;
 	transition: all .1s ease-in-out;
 	-moz-transition: all .1s ease-in-out;
 	-webkit-transition: all .1s ease-in-out;
@@ -771,26 +784,7 @@ span.status {
 
 /* Foster */
 
-#foster_list {
-	position: relative;
-	top: 100px;
-}
-
 /* Treatment */
-
-body._tp .container {
-	width: 800px;
-	margin: 0 auto;
-}
-
-body._tp label {
-	width: 150px;
-}
-
-body._tp .submit {
-	float: none;
-	margin-left: 120px;
-}
 
 .course_label {
 	z-index: 1;
@@ -831,23 +825,6 @@ select.units {
 
 select.repeat {
 	width: 160px;
-}
-
-span.interval {
-	margin-right: 30px;
-	width: 30px;
-	text-align: right;
-	display: inline-block;
-}
-
-span.course:hover {
-	cursor: pointer;
-}
-
-span.missing_course {
-	color:#f85056;
-} .missing_course:hover {
-	cursor: pointer;
 }
 
 /* Colors */

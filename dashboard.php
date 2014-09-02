@@ -1,6 +1,7 @@
 <?php
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
+include_once 'includes/classes.php';
 
 sec_session_start();
 ?>
@@ -45,24 +46,18 @@ sec_session_start();
 		$first_today = true;
 		$first_week = true;
 
-		$join_result = mysqli_query($mysqli, "
-			SELECT * FROM intersect_cat_treatment 
-			INNER JOIN cats
-			ON cats_idcat = idcat 
-			WHERE received=0 AND deleted=0 AND location='PetSmart' AND date<'$week'
-			ORDER BY date ASC;"
-		);
-		while($join_row = mysqli_fetch_array($join_result)) {
-			$intersect_id = $join_row['idintersect'];
-			$treatment_id = $join_row['treatments_idtreatment'];
-			$treatment_result = mysqli_query($mysqli, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
-			$treatment_row = mysqli_fetch_array($treatment_result);
-			$cat_name = $join_row['name'];
-			$cat_id = $join_row['idcat'];
+		$petsmart_treatments = new location_treatments($mysqli, "PetSmart");
+		$foster_treatments = new location_treatments($mysqli, "Foster");
+
+		foreach ($petsmart_treatments->rows as $row) {
+			$intersect_id = $row[0];
+			$treatment_name = $row[1];
+			$cat_id = $row[2];
+			$cat_name = $row[3];
+			$print_date = date("M j", strtotime($row[4]));
+			$scheduled_date = date("Y-m-d", strtotime($row[4]));
+			
 			$click_action = "window.location.href='cat.php?id=$cat_id'";
-			$print_date = date("M j", strtotime($join_row['date']));
-			$scheduled_date = date("Y-m-d", strtotime($join_row['date']));
-			$treatment_name = $treatment_row['name'];
 
 			if ($scheduled_date < $today and $first_missed) {
 				$first_missed = false;
@@ -80,10 +75,10 @@ sec_session_start();
 				echo "<span class='status week_text'>Week</span>";
 			}
 
-			echo "<div class='treatment_row'>";
-			echo "<div class='db_date row'>$print_date</div>";
-			echo "<div class='cat_name row' onClick=$click_action>$cat_name</div>";
-			echo "<div class='db_treatment row'>$treatment_name</div>";;
+			echo "<div class='row'>";
+			echo "<div class='db_date row_element'>$print_date</div>";
+			echo "<div class='cat_name row_element' onClick=$click_action>$cat_name</div>";
+			echo "<div class='treatment_name row_element'>$treatment_name</div>";;
 			echo "<div 	class='box_submit uncheck'
 						title = '$uncheck_tooltip'
 						onclick = 'check_box_recieved(this, $intersect_id)'></div>";
@@ -99,31 +94,23 @@ sec_session_start();
 		$first_today = true;
 		$first_week = true;
 
-		$foster_join_result = mysqli_query($mysqli, "
-			SELECT * FROM intersect_cat_treatment 
-			INNER JOIN cats
-			ON cats_idcat = idcat 
-			WHERE received=0 AND deleted=0 AND location='Foster' AND date<'$week'
-			ORDER BY date ASC;"
-		);
-		while($foster_join_row = mysqli_fetch_array($foster_join_result)) {
-			$intersect_id = $foster_join_row['idintersect'];
-			$treatment_id = $foster_join_row['treatments_idtreatment'];
-			$treatment_result = mysqli_query($mysqli, "SELECT * FROM treatments WHERE idtreatment = $treatment_id");				
-			$treatment_row = mysqli_fetch_array($treatment_result);
-
-			$cat_name = $foster_join_row['name'];
-			$cat_id = $foster_join_row['idcat'];
-			$foster_id = $foster_join_row['fosters_idfoster'];
-
-			$foster_result = mysqli_query($mysqli, "SELECT * FROM fosters WHERE idfoster = $foster_id");				
-			$foster_row = mysqli_fetch_array($foster_result);
-			$foster_name = $foster_row['name'];
+		foreach ($foster_treatments->rows as $row) {
+			$intersect_id = $row[0];
+			$treatment_name = $row[1];
+			$cat_id = $row[2];
+			$cat_name = $row[3];
+			$print_date = date("M j", strtotime($row[4]));
+			$scheduled_date = date("Y-m-d", strtotime($row[4]));
 
 			$click_action = "window.location.href='cat.php?id=$cat_id'";
-			$print_date = date("M j", strtotime($foster_join_row['date']));
-			$scheduled_date = date("Y-m-d", strtotime($foster_join_row['date']));
-			$treatment_name = $treatment_row['name'];
+
+			if ($stmt = $mysqli->prepare("SELECT name FROM fosters WHERE idfoster=?")) {
+				$stmt->bind_param("i", $row[5]);
+				$stmt->execute();
+				$stmt->bind_result($foster_name);
+				$stmt->fetch();
+				$stmt->close();
+			}
 
 			if ($scheduled_date < $today and $first_missed) {
 				$first_missed = false;
@@ -141,20 +128,19 @@ sec_session_start();
 				echo "<span class='status week_text'>Week</span>";
 			}
 
-			echo "<div class='treatment_row'>";
-			echo "<div class='db_date row'>$print_date</div>";
-			echo "<div class='cat_name row' onClick=$click_action>$cat_name</div>";
-			echo "<div class='db_treatment row'>$treatment_name</div>";
-			echo "<div class='db_foster_name row'>$foster_name</div>";
+			echo "<div class='row'>";
+			echo "<div class='db_date row_element'>$print_date</div>";
+			echo "<div class='cat_name row_element' onClick=$click_action>$cat_name</div>";
+			echo "<div class='treatment_name row_element'>$treatment_name</div>";
+			echo "<div class='foster_name row_element'>$foster_name</div>";
 			echo "<div 	class='box_submit uncheck' 
 						title = '$uncheck_tooltip'
 						onclick = 'check_box_recieved(this, $intersect_id)'></div>";
 			echo "</div>";
 		}
 		echo "</div>";
-		mysqli_close($mysqli);
+		$mysqli->close();
 		?>
-		</div>
 	</div>
 </div>
 </body>
