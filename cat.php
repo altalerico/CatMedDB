@@ -87,24 +87,24 @@ sec_session_start();
 ?>	
 
 <!-- Cat's profile -->
-<?php echo "<h1 id='page_title'>$cat->name's Profile</h1>"; ?>
+<?php echo "<h1 id='profile_title'>$cat->name's Profile</h1>"; ?>
 <div id="profile_wrapper">
 
 	<div id="container_left">
 
 		<!-- Information box -->
-		<div class="profile_div">
+		<div class="card">
 			<form method="post" action="process.php">
-			<div class="profile_div_header">
-				<img class="profile_paw" src="img/paw.png">
+			<div class="header">
+				<img class="paw" src="img/paw.png">
 				<h2 class="div_title" id="info_title">Information</h2>
 				<input type="submit" class="profile_submit" value="Update">
 			</div>
-			<div class="profile_div_content">
-				<label for="name" class="profile_label">Name</label>
+			<div class="content">
+				<label for="name" class="card">Name</label>
 				<input type="text" id="name_input" name="name" value="<?php echo $cat->name; ?>"><br>
 
-				<label for="sex" class="profile_label">Sex</label>
+				<label for="sex" class="card">Sex</label>
 				<select name="sex" id="sex">
 				<?php
 					$sexes = array ("", "Female","Spayed Female","Male","Neutered Male");
@@ -115,7 +115,7 @@ sec_session_start();
 				?>
 				</select><br>
 				
-				<label for="location" class="profile_label">Location</label>
+				<label for="location" class="card">Location</label>
 				<select name="location" id="location" onchange="fosterToggle()">
 				<?php
 					$locations = array ("", "Adopted", "Foster", "PetSmart");
@@ -158,7 +158,7 @@ sec_session_start();
 					}
 				}
 				?>
-				<label for="age_value" class="profile_label">Age/dob</label>
+				<label for="age_value" class="card">Age/dob</label>
 				<input type="text" id="age_input" name="age_value" value="<?php echo $age_value; ?>">
 				<select name="age_units" id="age_select">
 				<?php
@@ -171,50 +171,49 @@ sec_session_start();
 				</select>
 				<input type="text" id="dob" name="dob" placeholder="yyyy-mm-dd" value="<?php echo $cat->dob; ?>"><br>
 				
-				<label for="notes" class="profile_label">Notes</label>
+				<label for="notes" class="card">Notes</label>
 				<textarea name="notes" id="notes" rows="3" cols="32"><?php echo $cat->notes ?></textarea>
 			</div>
 			</form>
 		</div>
 
 		<!-- New treatment box -->
-		<div class="profile_div">
+		<div class="card">
 			<form method="post" action="process.php" class="profile_form">
-			<div class="profile_div_header">
-				<img class="profile_paw" src="img/paw.png">
+			<div class="header">
+				<img class="paw" src="img/paw.png">
 				<h2 class="div_title" id="new_treatment_title">New Treatment</h2>
 				<input type="submit" class="profile_submit" value="Schedule">
 			</div>
-			<div class="profile_div_content" id="new_treatment_content">
-				<label for="treatment" class="profile_label">Treatment</label>
+			<div class="content" id="new_treatment_content">
+				<label for="treatment" class="card">Treatment</label>
 				<select name="treatment" id="treatment">
 					<option></option>
 					<?php
 					foreach ($treatments as $treatment) {
-						echo "<option 
-							value='" . $treatment['idtreatment'] . "'>" . 
-							$treatment['name'] . "</option>";
+						printf("<option value='%u'>%s</option>", 
+							$treatment['idtreatment'], $treatment['name']);
 					}
 					?>
 				</select><br>
 
-				<label for="treatment_type" class="profile_label">Type</label>
+				<label for="treatment_type" class="card">Type</label>
 				<select name="treatment_type" id="treatment_type">
 					<option></option>
 					<option value="1">Single Treatment</option>
 					<option value="2">Course of Treatment</option>
 				</select><br>
 
-				<label for="datepicker" class="profile_label">Date</label>
+				<label for="datepicker" class="card">Date</label>
 				<input type="text" name="date" id="datepicker" />
 			</div>
 			</form>
 		</div> 
 
 		<!-- Treatments box. -->
-		<div class="profile_div">
-			<div class="profile_div_header">
-				<img class="profile_paw" src="img/paw.png">
+		<div class="card">
+			<div class="header">
+				<img class="paw" src="img/paw.png">
 				<h2 class="div_title" id="scheduled_treatments_title">Treatments</h2>
 				<input type="button" 
 					class="button" 
@@ -222,7 +221,7 @@ sec_session_start();
 					value="Print" 
 					onClick="window.open('print_medical.php?id=<?php echo $id ?>')">
 			</div>
-			<div class="profile_div_content">
+			<div class="content">
 				<?php
 				$any_missed = false;
 				$any_today = false;
@@ -302,22 +301,22 @@ sec_session_start();
 		<?php
 			$bg_img = "background-image:url(./upload/$selected_photo_file);";
 
-			echo "<div 	class = 'profile_div'
-						id = 'profile_photo_div'
+			echo "<div 	class = 'card'
+						id = 'profile_photo'
 						style = $bg_img>";
 		?>
 			<div class="icon" onclick="overlay()"></div>
 		</div>
 
 		<!-- Documents box -->
-		<div class="profile_div" id="scanned_documents_div">
+		<div class="card" id="scanned_documents_div">
 			<form method="post" action="process.php" enctype="multipart/form-data">
-			<div class="profile_div_header">
-				<img class="profile_paw" src="img/paw.png">
+			<div class="header">
+				<img class="paw" src="img/paw.png">
 				<h2 class="div_title" id="scanned_documents_title">Documents</h2>
 				<input type="submit" name="submit" value="Upload" class="profile_submit">
 			</div>
-			<div class="profile_div_content" id="scanned_documents_content">
+			<div class="content" id="scanned_documents_content">
 				<div id="scanned_docs">
 				<?php
 					foreach ($documents as $d) {

@@ -69,12 +69,13 @@ nav a {
 	top:76px;
 	z-index:6;
 	left: 200px;
-	width:167px;
+	width:166px;
+	border-radius: 2px;
 }
 
 .dp_dp {
 	left:200px;
-	width:167px;
+	width:166px;
 }
 .cp_cp {
 	left:392px;
@@ -95,10 +96,10 @@ nav a {
 	-webkit-animation:dcSlide 1s; /* Safari and Chrome */
 	-webkit-animation-fill-mode:forwards;
 } @keyframes dcSlide {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:392px; width:89px;}
 } @-webkit-keyframes dcSlide /* Safari and Chrome */ {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:392px; width:89px;}
 }
 
@@ -108,10 +109,10 @@ nav a {
 	-webkit-animation:dfSlide 1s; /* Safari and Chrome */
 	-webkit-animation-fill-mode:forwards;
 } @keyframes dfSlide {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:506px; width:124px;}
 } @-webkit-keyframes dfSlide /* Safari and Chrome */ {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:506px; width:124px;}
 }
 
@@ -121,10 +122,10 @@ nav a {
 	-webkit-animation:dtSlide 1s; /* Safari and Chrome */
 	-webkit-animation-fill-mode:forwards;
 } @keyframes dtSlide {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:655px; width:173px;}
 } @-webkit-keyframes dtSlide /* Safari and Chrome */ {
-	0% {left:200px; width:167px;}
+	0% {left:200px; width:166px;}
 	100% {left:655px; width:173px;}
 }
 
@@ -135,10 +136,10 @@ nav a {
 	-webkit-animation-fill-mode:forwards;
 } @keyframes cdSlide {
 	0% {left:392px; width:89px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 } @-webkit-keyframes cdSlide /* Safari and Chrome */ {
 	0% {left:392px; width:89px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 	
 }
 
@@ -175,10 +176,10 @@ nav a {
 	-webkit-animation-fill-mode:forwards;
 } @keyframes fdSlide {
 	0% {left:506px; width:124px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 } @-webkit-keyframes fdSlide /* Safari and Chrome */ {
 	0% {left:506px; width:124px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 }
 
 .fp_cp {
@@ -214,10 +215,10 @@ nav a {
 	-webkit-animation-fill-mode:forwards;
 } @keyframes tdSlide {
 	0% {left:655px; width:173px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 } @-webkit-keyframes tdSlide /* Safari and Chrome */ {
 	0% {left:655px; width:173px;}
-	100% {left:200px; width:167px;}
+	100% {left:200px; width:166px;}
 }
 
 .tp_cp {

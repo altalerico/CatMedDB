@@ -28,6 +28,8 @@ $_SESSION['page']="cp";
 <div id = "wrapper">
 	<div id = "nav_left">
 		<div class = "location_box">
+			<img class="paw" src="img/paw.png">
+			<h2 class="div_title">Locations</h2>
 			<?php
 				$locations_array = array ("foster", "petsmart", "limbo", "adopted");
 
@@ -37,12 +39,12 @@ $_SESSION['page']="cp";
 					
 					echo "<div class='location' id='$loc_title'>";
 						echo "<label for='$location'>$loc_title</label>";	
-						echo "<div id='$location' class='toggle ".$status."' onclick='toggle(".$location.")'></div>";
+						echo "<div id='$location' class='toggle $status' onclick='toggle($location)'></div>";
 					echo "</div>";
 				}
 			?>
 		</div>
-		<input type="button" class="button" id="new_cat_button" value="New Cat" onClick="window.location.href='cat.php?id='">
+		<input type="button" class="button" id="new_cat_btn" value="New Cat" onClick="window.location.href='cat.php?id='">
 	</div>
 	<div id="cat_container">
 	<?php
@@ -64,7 +66,7 @@ $_SESSION['page']="cp";
 				}
 
 				$bg_img = ($photo_file == "" ? "background-image:url(./img/default_small.png);" : "background-image:url(./upload/$photo_file);");
-				echo "<div class = 'cat_box $cat->location'>";
+				echo "<div class = 'cat_box $cat->location' onClick = 'cat_url($cat->id)'>";
 
 				if ($stmt = $mysqli->prepare("SELECT date FROM intersect_cat_treatment 
 					WHERE cats_idcat=? AND received=0 AND deleted=0
@@ -89,7 +91,6 @@ $_SESSION['page']="cp";
 				}
 
 				echo "<div 	class = 'cat'
-					onClick = 'cat_url($cat->id)'
 					style = $bg_img></div>";
 				echo "</div>";
 			}

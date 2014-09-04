@@ -42,7 +42,7 @@ $_SESSION['page'] = "fp";
 			$cnt = 0;
 			while ($stmt->fetch()) {
 				$cnt++;
-				if ($cnt > 5) {
+				if ($cnt > 4) {
 					echo "</div><div class='row'><div class='foster_name row_element'></div>";
 					$cnt = 0;
 				}

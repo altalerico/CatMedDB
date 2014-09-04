@@ -3,48 +3,40 @@ include_once 'psl-config.php';
 
 class interval {
 
-	public $id;
-	public $priority;
-	public $days;
-	public $repeat;
+	public $value;
+	public $unit;
+	public $count;
 
-	public function __construct($id, $priority, $days, $repeat) {
-		$this->id = $id;
-		$this->priority = $priority;
-		$this->days = $days;
-		$this->repeat = $repeat;
-
-		$interval_result = mysqli_query($mysqli, sprintf("
-			SELECT * FROM treatment_interval 
-			WHERE treatments_idtreatment=%u AND priority=%u;", 
-			$id, $priority)
-		);
-		$sql_interval = mysqli_fetch_array($interval_result);
-
-		if($sql_interval != NULL) {
-			$interval_update = mysqli_query($mysqli, sprintf("
-				UPDATE treatment_interval
-				SET days_until_treatment=%u, repeated=%u WHERE treatments_idtreatment=%u AND priority=%u;",
-				$days, $repeat, $id, $priority)
-			);
-		} else {  // Create a new interval.
-			$interval_insert = mysqli_query($mysqli, sprintf("
-				INSERT INTO treatment_interval 
-				SET treatments_idtreatment=%u, priority=%u, days_until_treatment=%u, repeated=%u;",
-				$id, $priority, $days, $repeat)
-			);
-		}
+	public function __construct($value, $unit, $count) {
+		$this->value = $value;
+		$this->unit = $unit;
+		$this->count = $count;
 	}
 }
 
 class regimen {
 
-	public $test;
-	public $intervals = array();
+	public $id;
+	public $intervals;
 
-	function add_interval($interval) {
-		$this->test = $interval->days;
-		array_push($this->intervals, $interval);
+	function __construct($mysqli, $id) {
+		$this->id = $id;
+		$this->intervals = array ();
+
+		if ($stmt = $mysqli->prepare("SELECT value, unit, count
+			FROM treatment_interval 
+			WHERE treatments_idtreatment=?
+			ORDER BY priority")) 
+		{
+			$stmt->bind_param("i", $id);
+			$stmt->execute();
+			$stmt->bind_result($value, $unit, $count);
+			while ($stmt->fetch()) {
+				$interval = new interval($value, $unit, $count);
+				array_push($this->intervals, $interval);
+			}
+			$stmt->close();
+		}
 	}
 }
 

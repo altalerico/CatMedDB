@@ -38,10 +38,44 @@ $_SESSION['page'] = "tp";
 				$stmt->bind_param('i', $row['idtreatment']);
 				$stmt->execute();
 				$stmt->store_result();
-				$add_class = ($stmt->num_rows == 0 ? "missed_text" : ""); 
+				$add_class = ($stmt->num_rows == 0 ? "missed_text" : "");
+				if ($stmt2 = $mysqli->prepare("SELECT value, unit, count 
+					FROM treatment_interval 
+					WHERE treatments_idtreatment=? 
+					ORDER BY priority")) 
+				{
+					$stmt2->bind_param('i', $row['idtreatment']);
+					$stmt2->execute();
+					$stmt2->store_result();
+					$stmt2->bind_result($value, $unit, $count);
+					$text = "";
+					while ($stmt2->fetch()) {
+						if ($value == 1) {
+							$interval_text = "Once a $unit ";
+						} else {
+							$unit = $unit . "s";
+							$interval_text = "Every $value $unit ";
+						}
+
+						if ($count == 1) {
+							$unit_text = ($value == 1 ? "a $unit" : "$value $unit");
+							$text = "Second treatment $unit_text after initial.";
+						} else {
+							if($value == 1) {
+								$unit = $unit . "s";
+							}
+							$value_text = $value * $count;
+							$duration = ($count == 11 ? "indefinitely." : "for $value_text $unit.");
+							$text = ($text == "" ? "$interval_text $duration" : "$text Then " . lcfirst ($interval_text) . $duration);
+						}
+					}
+					$stmt2->close();
+				}
 				$stmt->close();
 			}
-			printf("<div class='treatment_name %s'>%s</div>", $add_class, $row['name']);
+			printf("<div class='treatment_name row_element %s' onclick='treatment_url(%s)'>%s</div>", 
+				$add_class, $row['idtreatment'], $row['name']);
+			echo "<div class='description row_element'>$text</div>";
 			echo "</div>";
 		}
 		$result->close();

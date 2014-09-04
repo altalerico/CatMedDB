@@ -1,6 +1,7 @@
 <?php
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
+// include_once 'includes/classes.php';
 
 sec_session_start();
 
@@ -15,7 +16,6 @@ if(isset($_POST['name'])) {
 	$location = $_POST['location'];
 
 	$dob = ($_POST['dob'] ? $dob : null);
-
 	if ($_SESSION['id'] == null) {
 		if ($stmt = $mysqli->prepare("INSERT INTO cats (name, dob, sex, location, fosters_idfoster, notes) 
 			VALUES (?, ?, ?, ?, ?, ?)")) {
@@ -84,27 +84,24 @@ if(isset($_FILES['file'])) {
 			}
 		}
 	}
-
 }
 
-
 // New Treatment
-if(isset($_POST['treatment'], $_POST['date'])) {
-
-	if ($stmt = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
-		(cats_idcat, treatments_idtreatment, date) 
-		VALUES (?, ?, ?)")) 
-	{
-		$stmt->bind_param('iis', 
-			$_SESSION['id'], 
-			$_POST['treatment'],
-			$_POST['date']);
-		$stmt->execute();
-		$stmt->close();
-	}
-
-	if($_POST['treatment_type'] == 2) {
-		if ($stmt = $mysqli->prepare("SELECT days_until_treatment, repeated 
+if(isset($_POST['treatment'])) {
+	if($_POST['treatment_type'] == 1) {
+		if ($stmt = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+			(cats_idcat, treatments_idtreatment, date) 
+			VALUES (?, ?, ?)")) 
+		{
+			$stmt->bind_param('iis', 
+				$_SESSION['id'], 
+				$_POST['treatment'],
+				$_POST['date']);
+			$stmt->execute();
+			$stmt->close();
+		}	
+	} elseif($_POST['treatment_type'] == 2) {
+		if ($stmt = $mysqli->prepare("SELECT value, unit, count 
 			FROM treatment_interval 
 			WHERE treatments_idtreatment=? 
 			ORDER BY priority")) 
@@ -112,24 +109,24 @@ if(isset($_POST['treatment'], $_POST['date'])) {
 			$stmt->bind_param('i', $_POST['treatment']);
 			$stmt->execute();
 			$stmt->store_result();
-			$stmt->bind_result($days, $repeated);
+			$stmt->bind_result($value, $unit, $count);
 
 			$schedule_date = $_POST['date'];
 			while ($stmt->fetch()) {
-				$i = ($repeated == 11 ? 10 : 0);
-				while ($i<$repeated) {
-					$schedule_date = date('Y-m-d', strtotime($schedule_date . '+' . $days . ' days'));
-					if ($stmt = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+				$i = ($count == 11 ? 10 : 0);
+				while ($i<$count) {
+					if ($stmt2 = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
 	 					(cats_idcat, treatments_idtreatment, date) 
 	 					VALUES (?, ?, ?)")) 
 					{
-						$stmt->bind_param('iis', 
+						$stmt2->bind_param('iis', 
 							$_SESSION['id'],
 							$_POST['treatment'],
 							$schedule_date);
-						$stmt->execute();
-						$stmt->close();
+						$stmt2->execute();
+						$stmt2->close();
 					}
+					$schedule_date = date('Y-m-d', strtotime("$schedule_date + $value $unit"));
 					$i++;
 				}
 			}
@@ -137,6 +134,23 @@ if(isset($_POST['treatment'], $_POST['date'])) {
 		}
 	}
 }
+
+// if(isset($_POST['regimen'])) {  // treatment.php submit
+// 	$regimen = filter_input(INPUT_POST, 'regimen', FILTER_SANITIZE_STRING);
+// 	$treatment_result = mysqli_query($con, sprintf("SELECT * FROM treatments WHERE name='%s'", $_POST['treatment']));
+// 	$sql_treatment = mysqli_fetch_array($treatment_result);
+// 	$id = $sql_treatment['idtreatment'];
+
+// 	for($i = 0; $i < $interval_cnt; $i++) {
+// 		$priority = $i + 1;
+// 		if($_POST['value'][$i] != NULL) {
+// 			$days = calc_days($_POST['value'][$i], $_POST['unit'][$i]);
+			
+// 			$interval = new interval($id, $priority, $days, $_POST['repeat'][$i]);
+// 			$regimen->add_interval($interval);
+// 		}
+// 	}
+// }
 
 header("Location: ".$_SESSION['redirect'].$_SESSION['id'],true,303);
 ?>

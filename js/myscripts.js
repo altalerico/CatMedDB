@@ -142,7 +142,7 @@ function photo_update() {
 
 		var file_str = file.replace(" ", "%20");
 		var img_str = "url(/upload/" + file_str + ")";
-		var profile_photo = document.getElementById("profile_photo_div");
+		var profile_photo = document.getElementById("profile_photo");
 		profile_photo.style.backgroundImage = img_str;
 		if (window.XMLHttpRequest) {
 			xmlhttp=new XMLHttpRequest();
@@ -159,13 +159,13 @@ function check_box_recieved(ele, id) {
 		case "box_submit check_received":
 			ele.className = "box_submit uncheck";
 			ele.title = "Received: When treatment has been administered.";
-			ele.parentElement.className = "treatment_row";
+			ele.parentElement.className = "row";
 			action = "restore";
 			break;
 		case "box_submit uncheck":
 			ele.className = "box_submit check_received";
 			ele.title = "Restore:  Treatment has NOT been administered.";
-			ele.parentElement.className = "treatment_row received_text";
+			ele.parentElement.className = "row received_text";
 			action = "received";
 			break;
 		case "box_submit x":
@@ -187,6 +187,58 @@ function check_box_recieved(ele, id) {
 	}
 }
 
-function cat_url(cat_id) {
-	window.location.href = "cat.php?id=" + cat_id;
+function cat_url(id) {
+	window.location.href = "cat.php?id=" + id;
+}
+
+function treatment_url(id) {
+	window.location.href = "treatment.php?id=" + id;
+}
+
+function update_unit(val) {
+	var i = (val.id).slice(-1);
+	var v = val.value;
+	unit = document.getElementById("unit " + i);
+
+	var str = "";
+	var last_char = "";
+	
+	for (var o = 1; o < 5; o++) {
+		str = unit.options[o].text;
+		last_char = unit.options[o].text.slice(-1);
+
+		if (v > 1 && last_char != "s") {
+			unit.options[o].text = str + "s";
+		} else if (v <= 1 && last_char == "s") {
+			unit.options[o].text = str.substring(0, str.length - 1);
+		}
+	}
+}
+
+function update_count(unit) {
+	var i = (unit.id).slice(-1);
+	count = document.getElementById("count " + i);
+	value = document.getElementById("value " + i);
+
+	var v = value.value;
+	var u = unit.value;
+
+	count.style.visibility = "visible";
+	for (var c = 2; c < 11; c++) {
+		count.options[c].text = "for " + (c * v) + " " + u + "s.";
+	}
+}
+
+function update_value(count) {
+	var i = (count.id).slice(-1);
+	var c = count.value;
+	value = document.getElementById("value " + i);
+
+	for (var v = 1; v < 10; v++) {
+		if (c == 1) {
+			value.options[v].text = "After " + v;
+		} else {
+			value.options[v].text = "Every " + v;
+		}
+	}
 }
