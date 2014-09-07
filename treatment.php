@@ -43,7 +43,7 @@
 		<div id="container">
 			<?php if ($login == 'super') : ?>
 				<div class="card">
-					<form method="post" action="process.php">
+					<form method="post" action="includes/process.php">
 						<div class="header">
 							<img class="paw" src="img/paw.png">
 							<h2 class="div_title">Intervals</h2>

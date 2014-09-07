@@ -52,7 +52,8 @@
 										$product = ($text == "" ? $value * ($count - 1) : 
 											$value * $count);
 										if ($unit == "day") {$product++;}
-										$duration = ($count == 11 ? "indefinitely." : 
+										$duration = ($count == 11 ? "indefinitely. 
+											(<span style='color: #60abf8; font-size: 17px;'>&#8734</span>)" : 
 											"for $product $unit" . "s. 
 											(<span style='color: #60abf8; font-size: 17px;'>$count</span>)");
 										$text = ($text == "" ? "$interval_text $duration" : 

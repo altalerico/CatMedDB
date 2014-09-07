@@ -113,7 +113,7 @@
 			<div id="container_left">
 				<!-- Information box -->
 				<div class="card">
-					<form method="post" action="process.php">
+					<form method="post" action="includes/process.php">
 						<div class="header">
 							<img class="paw" src="img/paw.png">
 							<h2 class="div_title" id="info_title">Information</h2>
@@ -212,7 +212,7 @@
 
 				<!-- New treatment box -->
 				<div class="card" style="<?php echo $div_style ?>">
-					<form method="post" action="process.php" class="profile_form">
+					<form method="post" action="includes/process.php" class="profile_form">
 						<div class="header">
 							<img class="paw" src="img/paw.png">
 							<h2 class="div_title" id="new_treatment_title">New Treatment</h2>
@@ -348,7 +348,7 @@
 				?>
 				<!-- Documents box -->
 				<div class="card" id="scanned_documents_div" style="<?php echo $style ?>">
-					<form method="post" action="process.php" enctype="multipart/form-data">
+					<form method="post" action="includes/process.php" enctype="multipart/form-data">
 						<div class="header">
 							<img class="paw" src="img/paw.png">
 							<h2 class="div_title" id="scanned_documents_title">Documents</h2>

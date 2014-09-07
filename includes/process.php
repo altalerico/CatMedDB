@@ -1,6 +1,6 @@
 <?php
-include_once 'includes/db_connect.php';
-include_once 'includes/functions.php';
+include_once 'db_connect.php';
+include_once 'functions.php';
 // include_once 'includes/classes.php';
 
 sec_session_start();
@@ -167,5 +167,5 @@ if(isset($_POST['treatment'])) {
 // 		}
 // 	}
 // }
-header("Location: ".$_SESSION['redirect'].$_SESSION['id'],true,303);
+header('Location: ' . $_SERVER['HTTP_REFERER']);
 ?>
