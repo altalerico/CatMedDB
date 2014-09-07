@@ -33,7 +33,7 @@ sec_session_start();
 		echo "<br><label class='profile_label'>Foster:</label>" . $foster_name . "<br><br>";
 	}
 
-	$history = new cat_treatments($mysqli, $_SESSION['id'], 1, "name, date");
+	$history = new cat_treatments($_SESSION['id'], 1, "name, date", $mysqli);
 	
 	$curr = "";
 	foreach ($history->intersects as $intersect) {

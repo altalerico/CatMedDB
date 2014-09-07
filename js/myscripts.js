@@ -13,6 +13,45 @@ $(document).ready(function() {
 	
 	$(function() {
 		$( "#datepicker" ).datepicker({dateFormat:'yy-mm-dd' });
+		$( document ).tooltip();
+
+		$( ".drop" ).click(function() {
+			$(this).parent(".row").effect("drop", 600);
+			check_box($(this)[0], $(this)[0].id);
+			return false;
+		});
+
+		$( ".drop_r" ).click(function() {
+			$(this).parent(".row").effect("drop", { direction: "right" }, 600);
+			check_box($(this)[0], $(this)[0].id);
+			return false;
+		});
+
+		$(".more").click((function() {
+		    return function() {
+		    	span_toggle($(this)[0]);
+		    	$(this).parent().parent().animate({
+		            height: 140
+		        }, 700, "swing");
+
+		        $(this).parent().animate({
+		            height: 130
+		        }, 700, "swing");
+		    }
+		})());
+
+		$(".less").click((function() {
+		    return function() {
+		    	span_toggle($(this)[0]);
+		    	$(this).parent().parent().animate({
+		            height: 60
+		        }, 700, "swing");
+
+		        $(this).parent().animate({
+		            height: 50
+		        }, 700, "swing");
+		    }
+		})());
 	});
 	
 	var docked = false;
@@ -152,7 +191,7 @@ function photo_update() {
 	}
 }
 
-function check_box_recieved(ele, id) {
+function check_box(ele, id) {
 	var action = "";
 
 	switch (ele.className) {
@@ -163,17 +202,17 @@ function check_box_recieved(ele, id) {
 			action = "restore";
 			break;
 		case "box_submit uncheck":
+		case "box_submit uncheck drop":
+		case "box_submit uncheck drop_r":
 			ele.className = "box_submit check_received";
 			ele.title = "Restore:  Treatment has NOT been administered.";
 			ele.parentElement.className = "row received_text";
 			action = "received";
 			break;
-		case "box_submit x":
-			ele.parentElement.style.display = "none";
+		case "box_submit x drop":
+		case "box_submit x_received drop":
 			action = "delete";
-		case "box_submit x_received":
-			ele.parentElement.style.display = "none";
-			action = "delete";
+			break;
 		default:
 			break;
 	}
@@ -199,13 +238,19 @@ function update_unit(val) {
 	var i = (val.id).slice(-1);
 	var v = val.value;
 	unit = document.getElementById("unit " + i);
-
+	r_text = document.getElementById("r_text " + i)
 	var str = "";
 	var last_char = "";
 	
 	for (var o = 1; o < 5; o++) {
 		str = unit.options[o].text;
 		last_char = unit.options[o].text.slice(-1);
+
+		if (v == 0) {
+			r_text.style.visibility = "hidden";
+		} else {
+			r_text.style.visibility = "visible";
+		}
 
 		if (v > 1 && last_char != "s") {
 			unit.options[o].text = str + "s";
@@ -222,10 +267,15 @@ function update_count(unit) {
 
 	var v = value.value;
 	var u = unit.value;
+	var num = 0;
 
 	count.style.visibility = "visible";
-	for (var c = 2; c < 11; c++) {
-		count.options[c].text = "for " + (c * v) + " " + u + "s.";
+	for (var c = 1; c < 10; c++) {
+		num = c * v;
+		if (u == "day") {
+			num++;
+		}
+		count.options[c].text = "for " + num + " " + u + "s.";
 	}
 }
 
@@ -233,12 +283,23 @@ function update_value(count) {
 	var i = (count.id).slice(-1);
 	var c = count.value;
 	value = document.getElementById("value " + i);
+	var txt = "";
 
 	for (var v = 1; v < 10; v++) {
-		if (c == 1) {
-			value.options[v].text = "After " + v;
+		if (v == 1) {
+			txt = "once a";
 		} else {
-			value.options[v].text = "Every " + v;
+			txt = "every " + v;
 		}
+		value.options[v].text = txt;
+	}
+}
+
+function span_toggle(id_str) {
+	span = document.getElementById(id_str.id);
+	if (span.style.display == "none") {
+		span.style.display = "inline-block";
+	} else {
+		span.style.display = "none";
 	}
 }

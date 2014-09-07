@@ -10,5 +10,6 @@
 	<script type="text/javascript" src="js/jquery-ui.js"></script>
 	<script type="text/javascript" src="js/myscripts.js"></script>  
 	<script type="text/javascript" src="js/cookie.js"></script>
+	<script type="text/javascript" src="js/sha512.js"></script>
 	<script type="text/javascript" src="js/forms.js"></script>
 	<link rel="icon" href="img/favicon.ico" type="image/x-icon" />

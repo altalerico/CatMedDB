@@ -101,36 +101,52 @@ if(isset($_POST['treatment'])) {
 			$stmt->close();
 		}	
 	} elseif($_POST['treatment_type'] == 2) {
-		if ($stmt = $mysqli->prepare("SELECT value, unit, count 
+		if ($stmt1 = $mysqli->prepare("SELECT value, unit, count 
 			FROM treatment_interval 
 			WHERE treatments_idtreatment=? 
 			ORDER BY priority")) 
 		{
-			$stmt->bind_param('i', $_POST['treatment']);
-			$stmt->execute();
-			$stmt->store_result();
-			$stmt->bind_result($value, $unit, $count);
-
-			$schedule_date = $_POST['date'];
-			while ($stmt->fetch()) {
-				$i = ($count == 11 ? 10 : 0);
-				while ($i<$count) {
+			$stmt1->bind_param('i', $_POST['treatment']);
+			$stmt1->execute();
+			$stmt1->store_result();
+			$stmt1->bind_result($value, $unit, $count);
+			$schedule_date = "";
+			$indefinitely = 1;
+			while ($stmt1->fetch()) {
+				if ($count == 11) {
+					$schedule_date = ($schedule_date == "" ? $_POST['date'] :
+						date('Y-m-d', strtotime("$schedule_date + $value $unit")));
 					if ($stmt2 = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
-	 					(cats_idcat, treatments_idtreatment, date) 
-	 					VALUES (?, ?, ?)")) 
+		 					(cats_idcat, treatments_idtreatment, date, indefinitely) 
+		 					VALUES (?, ?, ?, ?)"))
 					{
-						$stmt2->bind_param('iis', 
+						$stmt2->bind_param('iisi',
 							$_SESSION['id'],
 							$_POST['treatment'],
-							$schedule_date);
+							$schedule_date,
+							$indefinitely);
 						$stmt2->execute();
 						$stmt2->close();
 					}
-					$schedule_date = date('Y-m-d', strtotime("$schedule_date + $value $unit"));
-					$i++;
+				} else {
+					for ($i = 0; $i < $count; $i++) {
+						$schedule_date = ($schedule_date == "" ? $_POST['date'] :
+							date('Y-m-d', strtotime("$schedule_date + $value $unit")));
+						if ($stmt3 = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+		 					(cats_idcat, treatments_idtreatment, date) 
+		 					VALUES (?, ?, ?)")) 
+						{
+							$stmt3->bind_param('iis', 
+								$_SESSION['id'],
+								$_POST['treatment'],
+								$schedule_date);
+							$stmt3->execute();
+							$stmt3->close();
+						}
+					}
 				}
 			}
-			$stmt->close();
+			$stmt1->close();
 		}
 	}
 }
@@ -151,6 +167,5 @@ if(isset($_POST['treatment'])) {
 // 		}
 // 	}
 // }
-
 header("Location: ".$_SESSION['redirect'].$_SESSION['id'],true,303);
 ?>

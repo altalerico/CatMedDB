@@ -30,5 +30,19 @@ if ($stmt = $mysqli->prepare($query)) {
 	$stmt->close();
 }
 
+if($stmt1 = $mysqli->prepare("SELECT indefinitely 
+	FROM intersect_cat_treatment 
+	WHERE idintersect=?"))
+{
+	$stmt1->bind_param("i", $id);
+	$stmt1->execute();
+	$stmt1->bind_result($indefinitely);
+	$stmt1->fetch();
+	if($indefinitely) {
+		
+	}
+	$stmt1->close();
+}
+
 $mysqli->close();
 ?>

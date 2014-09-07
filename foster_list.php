@@ -1,59 +1,63 @@
 <?php
-include 'includes/db_connect.php';
-include 'includes/functions.php';
+	include 'includes/db_connect.php';
+	include 'includes/functions.php';
 
-sec_session_start();
+	sec_session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>Foster List</title>
-	<?php include 'includes/header.inc'; ?>
-</head>
+	<head>
+		<title>Foster List</title>
+		<?php include 'includes/header.inc'; ?>
+	</head>
+	<body class="_fp">
+		<?php 
+			include 'includes/menu.inc';
 
-<body class="_fp">
+			$value = ($_SESSION['page'] == null ? "null" : $_SESSION['page']);
+			echo "<input type='hidden' class='pass' value='$value'>";
+			$_SESSION['page'] = "fp";
+		?>
+		<h1 id="page_title">Fosters</h1>
+		<div id="container">
+			<?php 
+				if (login_check($mysqli)) :
+					$query = "SELECT idfoster, name FROM fosters";
+					if ($result = $mysqli->query($query)) {
+						$fosters = $result->fetch_all(MYSQLI_ASSOC);
+					}
 
-<?php 
-include 'includes/menu.inc';
+					foreach ($fosters as $foster) {
+						echo "<div class='list_row'>";
+						printf("<div class='list_name'>%s</div>", $foster['name']);
 
-if($_SESSION['page'] == NULL) {
-	echo "<input type='hidden' class='pass' value='NULL'>";
-} else {
-	echo "<input type='hidden' class='pass' value='".$_SESSION['page']."'>";
-}
-$_SESSION['page'] = "fp";
-?>
-<h1 id="page_title">Fosters</h1>
-<div id="container">
-	<?php
-	$query = "SELECT idfoster, name FROM fosters";
-	if ($result = $mysqli->query($query)) {
-		$fosters = $result->fetch_all(MYSQLI_ASSOC);
-	}
-
-	foreach ($fosters as $foster) {
-		echo "<div class='row'>";
-		printf("<div class='foster_name row_element'>%s</div>", $foster['name']);
-
-		if($stmt = $mysqli->prepare("SELECT name FROM cats WHERE fosters_idfoster=?")) {
-			$stmt->bind_param('i', $foster['idfoster']);
-			$stmt->execute();
-			$stmt->bind_result($name);
-			$cnt = 0;
-			while ($stmt->fetch()) {
-				$cnt++;
-				if ($cnt > 4) {
-					echo "</div><div class='row'><div class='foster_name row_element'></div>";
-					$cnt = 0;
-				}
-				echo "<div class='cat_name row_element'>$name</div>";
-			}
-		}
-
-		echo "</div>";
-	}
-	$mysqli->close(); 
-	?>
-</div>
-</body>
+						if($stmt = $mysqli->prepare("SELECT name FROM cats WHERE fosters_idfoster=?")) {
+							$stmt->bind_param('i', $foster['idfoster']);
+							$stmt->execute();
+							$stmt->bind_result($name);
+							$stmt->store_result();
+							printf("<div class='description expand_div' id='ed_%s'>", 
+								$foster['idfoster']);
+							
+							$cnt = 0;
+							while ($stmt->fetch()) {
+								$cnt++;
+								echo "<div class='cat_name'>$name</div>";
+								if ($cnt == 3 and $stmt->num_rows > 4) {
+									$diff = $stmt->num_rows - $cnt;
+									printf("<span class='more' id='m_%s'>+$diff more</span>", 
+										$foster['idfoster']);
+								} 
+							}
+							echo "</div>";
+						}
+						echo "</div>";
+					}
+					$mysqli->close();
+				else : 
+					echo "<span class='error'>You are not authorized to access this page.</span>";
+				endif;
+			?>
+		</div>
+	</body>
 </html>

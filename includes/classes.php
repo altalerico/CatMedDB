@@ -19,7 +19,7 @@ class regimen {
 	public $id;
 	public $intervals;
 
-	function __construct($mysqli, $id) {
+	function __construct($id, $mysqli) {
 		$this->id = $id;
 		$this->intervals = array ();
 
@@ -50,11 +50,14 @@ class cat {
 	public $foster;
 	public $notes;
 
-	public function __construct($mysqli, $id) {
+	public function __construct($id, $mysqli) {
 		$this->id = $id;
 
-		$stmt =  $mysqli->stmt_init();
-		if ($stmt = $mysqli->prepare("SELECT name, dob, sex, location, fosters_idfoster, notes FROM cats WHERE idcat=?")) {
+		$stmt = $mysqli->stmt_init();
+		if ($stmt = $mysqli->prepare("SELECT name, dob, sex, location, fosters_idfoster, notes 
+			FROM cats 
+			WHERE idcat=?")) {
+
 			$stmt->bind_param("i", $id);
 			$stmt->execute();
 			$stmt->bind_result($this->name, $this->dob, $this->sex, $this->location, $this->foster, $this->notes);
@@ -81,7 +84,7 @@ class cat_treatments {
 
 	public $intersects;
 
-	public function __construct($mysqli, $cat, $received, $order) {
+	public function __construct($cat, $received, $order, $mysqli) {
 		$this->intersects = array ();
 
 		$stmt =  $mysqli->stmt_init();
@@ -109,7 +112,7 @@ class location_treatments {
 
 	public $rows;
 
-	public function __construct($mysqli, $location) {
+	public function __construct($location, $mysqli) {
 		$this->rows = array ();
 
 		$week = date("Y-m-d", strtotime('next week'));
