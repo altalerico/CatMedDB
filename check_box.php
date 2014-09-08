@@ -21,8 +21,8 @@ switch ($action) {
 }
 
 $stmt =  $mysqli->stmt_init();
-$query = ($delete ? "UPDATE intersect_cat_treatment SET deleted=? WHERE idintersect=?" : 
-	"UPDATE intersect_cat_treatment SET received=? WHERE idintersect=?");
+$query = ($delete ? "UPDATE cat_treatment SET deleted=? WHERE idintersect=?" : 
+	"UPDATE cat_treatment SET received=? WHERE idintersect=?");
 
 if ($stmt = $mysqli->prepare($query)) {
 	$stmt->bind_param("ii", $set, $id);
@@ -31,7 +31,7 @@ if ($stmt = $mysqli->prepare($query)) {
 }
 
 if($stmt1 = $mysqli->prepare("SELECT indefinitely 
-	FROM intersect_cat_treatment 
+	FROM cat_treatment 
 	WHERE idintersect=?"))
 {
 	$stmt1->bind_param("i", $id);

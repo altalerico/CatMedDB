@@ -89,7 +89,7 @@ if(isset($_FILES['file'])) {
 // New Treatment
 if(isset($_POST['treatment'])) {
 	if($_POST['treatment_type'] == 1) {
-		if ($stmt = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+		if ($stmt = $mysqli->prepare("INSERT INTO cat_treatment 
 			(cats_idcat, treatments_idtreatment, date) 
 			VALUES (?, ?, ?)")) 
 		{
@@ -116,7 +116,7 @@ if(isset($_POST['treatment'])) {
 				if ($count == 11) {
 					$schedule_date = ($schedule_date == "" ? $_POST['date'] :
 						date('Y-m-d', strtotime("$schedule_date + $value $unit")));
-					if ($stmt2 = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+					if ($stmt2 = $mysqli->prepare("INSERT INTO cat_treatment 
 		 					(cats_idcat, treatments_idtreatment, date, indefinitely) 
 		 					VALUES (?, ?, ?, ?)"))
 					{
@@ -132,7 +132,7 @@ if(isset($_POST['treatment'])) {
 					for ($i = 0; $i < $count; $i++) {
 						$schedule_date = ($schedule_date == "" ? $_POST['date'] :
 							date('Y-m-d', strtotime("$schedule_date + $value $unit")));
-						if ($stmt3 = $mysqli->prepare("INSERT INTO intersect_cat_treatment 
+						if ($stmt3 = $mysqli->prepare("INSERT INTO cat_treatment 
 		 					(cats_idcat, treatments_idtreatment, date) 
 		 					VALUES (?, ?, ?)")) 
 						{

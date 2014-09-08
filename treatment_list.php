@@ -1,6 +1,7 @@
 <?php
 	include_once 'includes/db_connect.php';
 	include_once 'includes/functions.php';
+	include_once 'includes/classes.php';
 
 	sec_session_start();
 ?>
@@ -21,48 +22,32 @@
 		<h1 id="page_title">Treatments</h1>
 		<div id="container">
 			<?php 
-				if (login_check($mysqli)) :
+				if (login_check($mysqli) == "super") :
 					$query = "SELECT idtreatment, name FROM treatments";
 					if ($result = $mysqli->query($query)) {
 						while ($row = $result->fetch_assoc()) {
-							echo "<div class='list_row'>";
-							if ($stmt1 = $mysqli->prepare("SELECT idinterval 
-								FROM treatment_interval 
-								WHERE treatments_idtreatment=?")) {
+							echo "<div class='list_row utd_gradient'>";
+							$text = "";
+							
+							$regimen = new regimen($row['idtreatment'], $mysqli);
+							foreach ($regimen->intervals as $interval) {
+								$value = $interval[0];
+								$unit = $interval[1];
+								$count = $interval[2];
 
-								$stmt1->bind_param('i', $row['idtreatment']);
-								$stmt1->execute();
-								$stmt1->store_result();
-								$add_class = ($stmt1->num_rows == 0 ? "missed_text" : "");
-
-								if ($stmt2 = $mysqli->prepare("SELECT value, unit, count 
-									FROM treatment_interval 
-									WHERE treatments_idtreatment=? 
-									ORDER BY priority")) {
-
-									$stmt2->bind_param('i', $row['idtreatment']);
-									$stmt2->execute();
-									$stmt2->store_result();
-									$stmt2->bind_result($value, $unit, $count);
-									$text = "";
-
-									while ($stmt2->fetch()) {
-										$interval_text = ($value == 1 ? "Once a $unit " : 
-											"Every $value $unit" . "s ");
-										$product = ($text == "" ? $value * ($count - 1) : 
-											$value * $count);
-										if ($unit == "day") {$product++;}
-										$duration = ($count == 11 ? "indefinitely. 
-											(<span style='color: #60abf8; font-size: 17px;'>&#8734</span>)" : 
-											"for $product $unit" . "s. 
-											(<span style='color: #60abf8; font-size: 17px;'>$count</span>)");
-										$text = ($text == "" ? "$interval_text $duration" : 
-											"$text<br>Then " . lcfirst ($interval_text) . $duration);
-									}
-									$stmt2->close();
-								}
-								$stmt1->close();
+								$interval_text = ($value == 1 ? "Once a $unit " : 
+									"Every $value $unit" . "s ");
+								$product = ($text == "" ? $value * ($count - 1) : 
+									$value * $count);
+								if ($unit == "day") {$product++;}
+								$duration = ($count == 11 ? "indefinitely. 
+									(<span style='color: #60abf8; font-size: 17px;'>&#8734</span>)" : 
+									"for $product $unit" . "s. 
+									(<span style='color: #60abf8; font-size: 17px;'>$count</span>)");
+								$text = ($text == "" ? "$interval_text $duration" : 
+									"$text<br>Then " . lcfirst ($interval_text) . $duration);
 							}
+
 							if (login_check($mysqli) == 'super') {
 								printf("<div class='list_name %s' 
 									onclick='treatment_url(%s)'>%s</div>", 

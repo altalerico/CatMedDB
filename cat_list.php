@@ -74,7 +74,7 @@ sec_session_start();
 								"background-image:url(./upload/$photo_file);");
 							echo "<div class='cat_box $cat->location' onClick='cat_url($cat->id)'>";
 
-							if ($stmt = $mysqli->prepare("SELECT date FROM intersect_cat_treatment 
+							if ($stmt = $mysqli->prepare("SELECT date FROM cat_treatment 
 								WHERE cats_idcat=? AND received=0 AND deleted=0
 								ORDER BY date ASC
 								LIMIT 1")) {

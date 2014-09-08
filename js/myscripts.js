@@ -31,11 +31,11 @@ $(document).ready(function() {
 		    return function() {
 		    	span_toggle($(this)[0]);
 		    	$(this).parent().parent().animate({
-		            height: 140
+		            height: 110
 		        }, 700, "swing");
 
 		        $(this).parent().animate({
-		            height: 130
+		            height: 100
 		        }, 700, "swing");
 		    }
 		})());
@@ -44,11 +44,11 @@ $(document).ready(function() {
 		    return function() {
 		    	span_toggle($(this)[0]);
 		    	$(this).parent().parent().animate({
-		            height: 60
+		            height: 64
 		        }, 700, "swing");
 
 		        $(this).parent().animate({
-		            height: 50
+		            height: 54
 		        }, 700, "swing");
 		    }
 		})());

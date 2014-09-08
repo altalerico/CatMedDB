@@ -56,9 +56,9 @@
 								$interval_cnt = 4;
 								for ($i = 0; $i < $interval_cnt; $i++) {
 									if ($interval = $regimen->intervals[$i]) {
-										$value = $interval->value;
-										$unit = $interval->unit;
-										$count = $interval->count;
+										$value = $interval[0];
+										$unit = $interval[1];
+										$count = $interval[2];
 									} else {
 										$value = 0;
 										$unit = "";

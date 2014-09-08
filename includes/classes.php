@@ -1,40 +1,35 @@
 <?php
 include_once 'psl-config.php';
 
-class interval {
-
-	public $value;
-	public $unit;
-	public $count;
-
-	public function __construct($value, $unit, $count) {
-		$this->value = $value;
-		$this->unit = $unit;
-		$this->count = $count;
-	}
-}
-
 class regimen {
 
-	public $id;
 	public $intervals;
+	public $dose;
 
-	function __construct($id, $mysqli) {
-		$this->id = $id;
+	function __construct($idtreatment, $mysqli) {
 		$this->intervals = array ();
+		$this->dose = "";
 
+		$stmt = $mysqli->stmt_init();
 		if ($stmt = $mysqli->prepare("SELECT value, unit, count
-			FROM treatment_interval 
+			FROM regimens
 			WHERE treatments_idtreatment=?
-			ORDER BY priority")) 
-		{
-			$stmt->bind_param("i", $id);
+			ORDER BY priority")) {
+
+			$stmt->bind_param("i", $idtreatment);
 			$stmt->execute();
 			$stmt->bind_result($value, $unit, $count);
 			while ($stmt->fetch()) {
-				$interval = new interval($value, $unit, $count);
-				array_push($this->intervals, $interval);
+				array_push($this->intervals, array ($value, $unit, $count));
 			}
+			$stmt->close();
+		}
+
+		if ($stmt = $mysqli->prepare("SELECT text FROM doses WHERE treatments_idtreatment=?")) {
+			$stmt->bind_param("i", $idtreatment);
+			$stmt->execute();
+			$stmt->bind_result($this->dose);
+			$stmt->fetch();
 			$stmt->close();
 		}
 	}
@@ -89,7 +84,7 @@ class cat_treatments {
 
 		$stmt =  $mysqli->stmt_init();
 		$query = "	SELECT idintersect, name, date
-					FROM intersect_cat_treatment 
+					FROM cat_treatment 
 					INNER JOIN treatments
 					ON treatments_idtreatment=idtreatment
 					WHERE deleted=0 AND cats_idcat=? AND received=?
@@ -121,7 +116,7 @@ class location_treatments {
 
 		if ($stmt = $mysqli->prepare("SELECT idintersect, t.`name` AS t_name, idcat, 
 				cats.`name` AS c_name, `date`, fosters_idfoster AS f_id
-			FROM intersect_cat_treatment AS ict
+			FROM cat_treatment AS ict
 			INNER JOIN treatments AS t
 			ON treatments_idtreatment=idtreatment
 			INNER JOIN cats

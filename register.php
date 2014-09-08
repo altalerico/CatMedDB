@@ -59,6 +59,6 @@ include_once 'includes/functions.php';
                     this.form.password,
                     this.form.confirmpwd);" /> 
         </form>
-        <p>Return to the <a href="cat_list.php">cat page</a>.</p>
+        <p>Return to the <a href="/cat_list.php">cat page</a>.</p>
     </body>
 </html>

@@ -21,7 +21,7 @@ sec_session_start();
 			$_SESSION['page'] = "dp";
 		?>
 		<div id = "wrapper">
-			<?php if (login_check($mysqli)) : ?>
+			<?php if (login_check($mysqli) == "super") : ?>
 				<div id="db_container_left">
 					<h1 id="petsmart_label">At PetSmart</h1>
 					<?php
